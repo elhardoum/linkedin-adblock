@@ -1,0 +1,33 @@
+{
+  "name": "LinkedIn Adblock",
+  "short_name": "LinkedIn Adblock",
+  "description": "Block ads and sponsored posts from your LinkedIn feed",
+  "version": "0.1",
+  "icons": {
+   "96": "./src/assets/icon.png"
+  },
+  "action": {
+    "default_icon": {
+      "96": "./src/assets/icon.png"
+    },
+    "default_popup": "./src/popup/index.html"
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": [ "./src/content/inject.js" ],
+      "matches": [ "https://www.linkedin.com/*" ],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [],
+  "host_permissions": [ "https://www.linkedin.com/*" ],
+  "manifest_version": 3,
+  "web_accessible_resources": [
+    {
+      "resources": ["src/content/index.js"],
+      "matches": [ "https://www.linkedin.com/*" ],
+      "extension_ids": []
+    }
+  ]
+}
