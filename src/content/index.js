@@ -1,5 +1,17 @@
 (() =>
 {
+  // please add more to support more locales
+  const PROMOTED_NOTICES = [
+    'Promoted',
+    'Promocionado',
+    'Post sponsorisé',
+    'प्रमोट किया गया',
+    'الترويج',
+    'Post sponsorizzato',
+    'プロモーション',
+    '프로모션',
+  ]
+
   const xhrOpen = XMLHttpRequest.prototype.open
 
   XMLHttpRequest.prototype.open = function()
@@ -43,4 +55,33 @@
 
     return xhrOpen.apply(this, arguments)
   }
+
+  const xquery = (query) =>
+  {
+    const elems = [], nodesSnapshot = document.evaluate(query, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null )
+
+    for ( let i=0 ; i < nodesSnapshot.snapshotLength; i++ ) {
+      elems.push( nodesSnapshot.snapshotItem(i) )
+    }
+
+    return elems
+  }
+
+  // server-rendered
+  new MutationObserver(() =>
+  {
+    PROMOTED_NOTICES.map(message =>
+    {
+      xquery(`//div[@data-id]//span[contains(@class, 'feed-shared-actor__sub-description')][text()='${message}']`)
+        .concat(xquery(`//div[@data-id]//span[contains(@class, 'feed-shared-actor__description')][text()='${message}']`))
+        .map(elem =>
+        {
+          const parent = elem.closest('[data-id]')
+          parent && parent.remove()
+        })
+    })
+  }).observe(document, {
+    subtree: true,
+    childList: true,
+  })
 })()
