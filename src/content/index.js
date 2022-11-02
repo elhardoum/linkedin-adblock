@@ -1,6 +1,6 @@
 (() =>
 {
-  // please add more to support more locales
+  // please add more messages to support more locales
   const PROMOTED_NOTICES = [
     'Promoted',
     'Promocionado',
@@ -11,6 +11,13 @@
     'プロモーション',
     '프로모션',
   ]
+
+  const NOTICE_SELECTORS = [
+    'feed-shared-actor__description',
+    'update-components-actor__description',
+    'update-components-actor__sub-description',
+    'feed-shared-actor__sub-description',
+  ].map(x => message => `//div[@data-id]//span[contains(@class, '${x}')][text()='${message}']`)
 
   const xhrOpen = XMLHttpRequest.prototype.open
 
@@ -72,8 +79,8 @@
   {
     PROMOTED_NOTICES.map(message =>
     {
-      xquery(`//div[@data-id]//span[contains(@class, 'feed-shared-actor__sub-description')][text()='${message}']`)
-        .concat(xquery(`//div[@data-id]//span[contains(@class, 'feed-shared-actor__description')][text()='${message}']`))
+      [].concat(...NOTICE_SELECTORS.map(x => xquery(x(message))))
+        .filter(Boolean)
         .map(elem =>
         {
           const parent = elem.closest('[data-id]')

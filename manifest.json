@@ -2,7 +2,7 @@
   "name": "LinkedIn Adblock",
   "short_name": "LinkedIn Adblock",
   "description": "Block ads and sponsored posts from your LinkedIn feed",
-  "version": "0.1",
+  "version": "0.2.1",
   "icons": {
    "96": "./src/assets/icon.png"
   },
