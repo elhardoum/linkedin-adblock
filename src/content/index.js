@@ -19,6 +19,10 @@
     'feed-shared-actor__sub-description',
   ].map(x => message => `//div[@data-id]//span[contains(@class, '${x}')][text()='${message}']`)
 
+  const NOTICE_SELECTORS2 = [
+    'update-components-actor__sub-description',
+  ].map(x => message => `//div[@data-id]//span[contains(@class, '${x}')]//span[text()='${message}']`)
+
   const xhrOpen = XMLHttpRequest.prototype.open
 
   XMLHttpRequest.prototype.open = function()
@@ -79,7 +83,10 @@
   {
     PROMOTED_NOTICES.map(message =>
     {
-      [].concat(...NOTICE_SELECTORS.map(x => xquery(x(message))))
+      [].concat(
+        ...NOTICE_SELECTORS.map(x => xquery(x(message))),
+        ...NOTICE_SELECTORS2.map(x => xquery(x(message)))
+        )
         .filter(Boolean)
         .map(elem =>
         {
